@@ -81,17 +81,25 @@ public class scratchable : MonoBehaviour
                 // GetComponent<Renderer>().material.mainTexture = texture;
                 Texture2D texture = GetComponent<Renderer>().material.mainTexture as Texture2D;
                 Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Debug.Log(pos);
+                
                 texture.SetPixel((int)pos.x, (int)pos.y, Color.clear);
-                // texture.SetPixels(int x, int y, int blockWidth, int blockHeight, Color[] colors, int miplevel = 0);
 
                 texture.Apply();
                 GetComponent<Renderer>().material.mainTexture = texture;
+
+                /* DEBUG */
+                Debug.Log(pos);
+                GameObject quad = GameObject.Find("TestQuad");
+                pos.z = -5;
+                quad.transform.position = pos;
+                /* EOF DEBUG */
             }
         }
-        
+
+        Debug.Log("Mouse : " + Input.mousePosition.x + " : " + Input.mousePosition.y);
+
         /*
-         *  
+         * Slide effect from edges to the center of the quad 
         */
         /*
         Texture2D texture = GetComponent<Renderer>().material.mainTexture as Texture2D;
@@ -124,6 +132,7 @@ public class scratchable : MonoBehaviour
         Debug.Log(Input.mousePosition);
         */
 
+
         /*
          * Diagonal auto 
         */
@@ -136,9 +145,9 @@ public class scratchable : MonoBehaviour
         this.pixelY ++;
         */
 
-        Debug.Log("Mouse : " + Input.mousePosition.x + " : " + Input.mousePosition.y);
-
-
+        /*
+         * Handle touch input on a mobile project 
+        */
         /*
         for (var touch : Touch in Input.touches)
         {
