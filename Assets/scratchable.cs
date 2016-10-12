@@ -10,7 +10,8 @@ public class scratchable : MonoBehaviour
 
     void Start()
     {
-        Texture2D texture = new Texture2D(128, 128);
+        // Texture2D texture = new Texture2D(1750, 800);
+        Texture2D texture = new Texture2D(400, 400);
         GetComponent<Renderer>().material.mainTexture = texture;
 
         for (int y = 0; y < texture.height; y++)
@@ -28,76 +29,40 @@ public class scratchable : MonoBehaviour
     void Update()
     {
         /*
-         * What does that even do ?
-        */
-        /*
-        for (int x = Mathf.Max(0, pixelX - radius); x < Mathf.Min(texture.width, pixelX + radius); x++)
-        {
-            for (int y = Mathf.Max(0, pixelY - radius); y < Mathf.Min(texture.height, pixelY + radius); y++)
-            {
-                float discount = (new Vector2(pixelX - x, pixelY - y)).magnitude / (float)radius;
-                if (discount < 1f)
-                {
-                    int index = x + y * texture.width;
-                    backPixels[index] = Color.Lerp(backPixels[index], frontPixels[index], Time.deltaTime * strength * (1f - discount));
-                }
-            }
-        }
-        texture.SetPixels32(backPixels);
-        texture.Apply();
-        */
-
-        // Debug.Log(Input.touchSupported);
-
-        /*
-         *  
-        */
-        /*
-        for (int i = 0; i < Input.touches.Length; i++)
-        {
-            Touch touch = Input.touches[i];
-            if(touch.phase == TouchPhase.Began)
-            {
-                // Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, Mathf.Infinity, LayerMask.NameToLayer("ScratchableSurface")))
-                {
-                    Debug.Log("TOUCHE");
-                }
-            }
-        }
-        */
-
-        /*
          * Move the mouse to scratch the screen 
         */
+        
         if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray))
             {
-                // Texture2D texture = new Texture2D(128, 128);
-                // GetComponent<Renderer>().material.mainTexture = texture;
                 Texture2D texture = GetComponent<Renderer>().material.mainTexture as Texture2D;
                 Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                
-                texture.SetPixel((int)pos.x, (int)pos.y, Color.clear);
 
+                int posX = Mathf.RoundToInt(pos.x);
+                int posY = Mathf.RoundToInt(pos.y);
+                
+                texture.SetPixel(posX, posY, Color.clear);
+                
                 texture.Apply();
                 GetComponent<Renderer>().material.mainTexture = texture;
 
-                /* DEBUG */
-                Debug.Log(pos);
-                GameObject quad = GameObject.Find("TestQuad");
-                pos.z = -5;
-                quad.transform.position = pos;
-                /* EOF DEBUG */
+                // DEBUG
+                // Debug.Log(posX + " : " + posY);
+                // Debug.Log("H : " + texture.height + "| W : " + texture.width);
+                // GameObject quad = GameObject.Find("TestQuad");
+                // pos.z = -5;
+                // quad.transform.position = pos;
+                // EOF DEBUG
+
+                Debug.Log("Pos : " + posX + " : " + posY);
             }
+
+            Debug.Log("Mouse : " + Input.mousePosition.x + " : " + Input.mousePosition.y);
         }
-
-        Debug.Log("Mouse : " + Input.mousePosition.x + " : " + Input.mousePosition.y);
-
+        
         /*
          * Slide effect from edges to the center of the quad 
         */
@@ -132,7 +97,6 @@ public class scratchable : MonoBehaviour
         Debug.Log(Input.mousePosition);
         */
 
-
         /*
          * Diagonal auto 
         */
@@ -144,6 +108,18 @@ public class scratchable : MonoBehaviour
         this.pixelX ++;
         this.pixelY ++;
         */
+
+        /*
+         * Erase few pixels manually to test erasing of neighbor pixels 
+        */
+        /*
+        Texture2D texture = GetComponent<Renderer>().material.mainTexture as Texture2D;
+        // texture.SetPixel(this.pixelX, this.pixelY, Color.clear);
+        // texture.SetPixel(0, 0, Color.clear);
+        // texture.SetPixel(0, 127, Color.clear);
+        texture.Apply();
+        GetComponent<Renderer>().material.mainTexture = texture;
+        */       
 
         /*
          * Handle touch input on a mobile project 
