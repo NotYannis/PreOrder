@@ -3,7 +3,7 @@ using System.Collections;
 
 public class scratchable : MonoBehaviour
 {
-    int square = 10;
+    int square = 20;
     int pixelX = 0;
     int pixelY = 0;
     int iPixelX = -1;
@@ -42,8 +42,22 @@ public class scratchable : MonoBehaviour
 
                 int posX = Mathf.RoundToInt(pos.x);
                 int posY = Mathf.RoundToInt(pos.y);
-                
-                texture.SetPixel(posX, posY, Color.clear);
+
+                // Draw a square with the mouse position in center
+                int minX = posX - square;
+                int maxX = posX + square;
+                int minY = posY - square;
+                int maxY = posY + square;
+
+                for (int i = minX; i <= maxX; i++)
+                {
+                    for (int j = minY; j <= maxY; j++)
+                    {
+                        texture.SetPixel(i, j, Color.clear);
+                    }
+                }
+
+                // texture.SetPixel(posX, posY, Color.clear);
                 
                 texture.Apply();
                 GetComponent<Renderer>().material.mainTexture = texture;
