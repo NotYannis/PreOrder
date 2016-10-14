@@ -4,6 +4,7 @@ using System.Collections;
 public class scratchable : MonoBehaviour
 {
     int square = 20;
+    int radius = 40;
     int pixelX = 0;
     int pixelY = 0;
     int iPixelX = -1;
@@ -44,6 +45,7 @@ public class scratchable : MonoBehaviour
                 int posY = Mathf.RoundToInt(pos.y);
 
                 // Draw a square with the mouse position in center
+                /*
                 int minX = posX - square;
                 int maxX = posX + square;
                 int minY = posY - square;
@@ -56,9 +58,52 @@ public class scratchable : MonoBehaviour
                         texture.SetPixel(i, j, Color.clear);
                     }
                 }
+                */
 
-                // texture.SetPixel(posX, posY, Color.clear);
-                
+                // Draw a circle with the mouse position in center
+                // We repeat the algorithm with a lesser radius each time
+                /*
+                int tempRadius = radius;
+                while(tempRadius >= 0)
+                {
+                    // Andres circle algorithm
+                    int x = 0;
+                    int y = tempRadius;
+                    int d = tempRadius - 1;
+
+                    while (y >= x)
+                    {
+                        texture.SetPixel(posX + x, posY + y, Color.clear);
+                        texture.SetPixel(posX + y, posY + x, Color.clear);
+                        texture.SetPixel(posX - x, posY + y, Color.clear);
+                        texture.SetPixel(posX - y, posY + x, Color.clear);
+                        texture.SetPixel(posX + x, posY - y, Color.clear);
+                        texture.SetPixel(posX + y, posY - x, Color.clear);
+                        texture.SetPixel(posX - x, posY - y, Color.clear);
+                        texture.SetPixel(posX - y, posY - x, Color.clear);
+
+                        if (d >= 2 * x)
+                        {
+                            d -= 2 * x + 1;
+                            x++;
+                        }
+                        else if (d < 2 * (tempRadius - y))
+                        {
+                            d += 2 * y - 1;
+                            y--;
+                        }
+                        else
+                        {
+                            d += 2 * (y - x - 1);
+                            y--;
+                            x++;
+                        }
+                    }
+
+                    tempRadius--;
+                }
+                */
+
                 texture.Apply();
                 GetComponent<Renderer>().material.mainTexture = texture;
             }
