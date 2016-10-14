@@ -60,51 +60,63 @@ public class scratchable : MonoBehaviour
                 }
                 */
 
-                // Draw a circle with the mouse position in center
-                // We repeat the algorithm with a lesser radius each time
+                // Draw a square but use setPixels method, which optimized setPixel method
+                // Same optimization issue
                 /*
-                int tempRadius = radius;
-                while(tempRadius >= 0)
+                int mipCount = texture.mipmapCount;
+                Color[] colors = new Color[square * square];
+                for (int i = 0; i < colors.Length; i++)
                 {
-                    // Andres circle algorithm
-                    int x = 0;
-                    int y = tempRadius;
-                    int d = tempRadius - 1;
-
-                    while (y >= x)
-                    {
-                        texture.SetPixel(posX + x, posY + y, Color.clear);
-                        texture.SetPixel(posX + y, posY + x, Color.clear);
-                        texture.SetPixel(posX - x, posY + y, Color.clear);
-                        texture.SetPixel(posX - y, posY + x, Color.clear);
-                        texture.SetPixel(posX + x, posY - y, Color.clear);
-                        texture.SetPixel(posX + y, posY - x, Color.clear);
-                        texture.SetPixel(posX - x, posY - y, Color.clear);
-                        texture.SetPixel(posX - y, posY - x, Color.clear);
-
-                        if (d >= 2 * x)
-                        {
-                            d -= 2 * x + 1;
-                            x++;
-                        }
-                        else if (d < 2 * (tempRadius - y))
-                        {
-                            d += 2 * y - 1;
-                            y--;
-                        }
-                        else
-                        {
-                            d += 2 * (y - x - 1);
-                            y--;
-                            x++;
-                        }
-                    }
-
-                    tempRadius--;
+                    colors[i] =  Color.clear;
                 }
+                texture.SetPixels(posX, posY, square, square, colors);
                 */
 
-                texture.Apply();
+               // Draw a circle with the mouse position in center
+               // We repeat the algorithm with a lesser radius each time
+               /*
+               int tempRadius = radius;
+               while(tempRadius >= 0)
+               {
+                   // Andres circle algorithm
+                   int x = 0;
+                   int y = tempRadius;
+                   int d = tempRadius - 1;
+
+                   while (y >= x)
+                   {
+                       texture.SetPixel(posX + x, posY + y, Color.clear);
+                       texture.SetPixel(posX + y, posY + x, Color.clear);
+                       texture.SetPixel(posX - x, posY + y, Color.clear);
+                       texture.SetPixel(posX - y, posY + x, Color.clear);
+                       texture.SetPixel(posX + x, posY - y, Color.clear);
+                       texture.SetPixel(posX + y, posY - x, Color.clear);
+                       texture.SetPixel(posX - x, posY - y, Color.clear);
+                       texture.SetPixel(posX - y, posY - x, Color.clear);
+
+                       if (d >= 2 * x)
+                       {
+                           d -= 2 * x + 1;
+                           x++;
+                       }
+                       else if (d < 2 * (tempRadius - y))
+                       {
+                           d += 2 * y - 1;
+                           y--;
+                       }
+                       else
+                       {
+                           d += 2 * (y - x - 1);
+                           y--;
+                           x++;
+                       }
+                   }
+
+                   tempRadius--;
+               }
+               */
+
+               texture.Apply();
                 GetComponent<Renderer>().material.mainTexture = texture;
             }
         }
