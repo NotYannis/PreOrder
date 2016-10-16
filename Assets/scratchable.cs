@@ -74,7 +74,7 @@ public class scratchable : MonoBehaviour
 
                // Draw a circle with the mouse position in center
                // We repeat the algorithm with a lesser radius each time
-               /*
+               
                int tempRadius = radius;
                while(tempRadius >= 0)
                {
@@ -114,7 +114,7 @@ public class scratchable : MonoBehaviour
 
                    tempRadius--;
                }
-               */
+               
 
                texture.Apply();
                 GetComponent<Renderer>().material.mainTexture = texture;
