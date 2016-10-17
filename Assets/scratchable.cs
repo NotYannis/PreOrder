@@ -54,8 +54,7 @@ public class scratchable : MonoBehaviour
     * Draw circle on player input 
     */
 	void mouseInput(){
-		
-		if(Input.GetMouseButton(0))
+		if(Input.GetMouseButton(1))
 		{
 			Texture2D texture = GetComponent<Renderer>().material.mainTexture as Texture2D;
 			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -109,13 +108,29 @@ public class scratchable : MonoBehaviour
 			texture.Apply();
 			GetComponent<Renderer>().material.mainTexture = texture;
 		}
-		/*
+
 		if(Input.GetMouseButton (0)) {
 			Vector3 mousePos = Camera.main.WorldToScreenPoint(Input.mousePosition);
 
 			Vector3 move = mousePos - lastMousePos;
 			Camera.main.transform.position += new Vector3(move.x, move.y, 0.0f);
-		}*/
+
+			Vector3 cameraPos = Camera.main.transform.position;
+
+			//Bounds checking
+			if(cameraPos.x < 0){
+				Camera.main.transform.position = new Vector3(0.0f, cameraPos.y, cameraPos.z);
+			}
+			if(cameraPos.x > transform.position.x){
+				Camera.main.transform.position = new Vector3(transform.position.x, cameraPos.y, cameraPos.z);
+			}
+			if(cameraPos.y < 0){
+				Camera.main.transform.position = new Vector3(cameraPos.x, 0.0f, cameraPos.z);
+			}
+			if(cameraPos.y > transform.position.y){
+				Camera.main.transform.position = new Vector3(cameraPos.x, transform.position.y, cameraPos.z);
+			}
+		}
 	}
 
 	/*
@@ -128,9 +143,24 @@ public class scratchable : MonoBehaviour
 		if(nTouch > 1)
 		{
 			Vector3 touchPos = Camera.main.WorldToScreenPoint(inputTouch.position);
+			Vector3 cameraPos = Camera.main.transform.position;
 
 			Vector3 move = touchPos - lastTouchPos;
-			Camera.main.transform.position += new Vector3(move.x, move.y, 0.0f);
+			Camera.main.transform.position += new Vector3(move.x, move.y, 0.0f);	
+			
+			//Bounds checking
+			if(cameraPos.x < 0){
+				Camera.main.transform.position = new Vector3(0.0f, cameraPos.y, cameraPos.z);
+			}
+			if(cameraPos.x > transform.position.x){
+				Camera.main.transform.position = new Vector3(transform.position.x, cameraPos.y, cameraPos.z);
+			}
+			if(cameraPos.y < 0){
+				Camera.main.transform.position = new Vector3(cameraPos.x, 0.0f, cameraPos.z);
+			}
+			if(cameraPos.y > transform.position.y){
+				Camera.main.transform.position = new Vector3(cameraPos.x, transform.position.y, cameraPos.z);
+			}
 		}
 		else if (nTouch == 1)
 		{
