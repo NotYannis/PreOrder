@@ -57,99 +57,75 @@ public class scratchable : MonoBehaviour
         }
 
         /*
-         * Move the mouse to scratch the screen 
+         * Move the screen when there is more than one touch
         */
-        
         if(nTouch > 1)
         {
             // inputTouch.position;
         }
         
-        // if(Input.GetMouseButtonDown(0))
-        if (nTouch == 1)
+        /*
+         * Draw circle on player input 
+        */
+        if(Input.GetMouseButton(0))
+        // if (nTouch == 1)
         {
-            // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Ray ray = Camera.main.ScreenPointToRay(inputTouch.position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // Ray ray = Camera.main.ScreenPointToRay(inputTouch.position);
 
             if (Physics.Raycast(ray))
             {
                 Texture2D texture = GetComponent<Renderer>().material.mainTexture as Texture2D;
-                // Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector3 pos = Camera.main.ScreenToWorldPoint(inputTouch.position);
+                Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                // Vector3 pos = Camera.main.ScreenToWorldPoint(inputTouch.position);
 
                 int posX = Mathf.RoundToInt(pos.x);
                 int posY = Mathf.RoundToInt(pos.y);
+                
 
-                // Draw a square with the mouse position in center
-                /*
-                int minX = posX - square;
-                int maxX = posX + square;
-                int minY = posY - square;
-                int maxY = posY + square;
+               // Draw a circle with the mouse position in center
+               // We repeat the algorithm with a lesser radius each time
+               
+               int tempRadius = radius;
+               while(tempRadius >= 0)
+               {
+                   // Andres circle algorithm
+                   int x = 0;
+                   int y = tempRadius;
+                   int d = tempRadius - 1;
 
-                for (int i = minX; i <= maxX; i++)
-                {
-                    for (int j = minY; j <= maxY; j++)
-                    {
-                        texture.SetPixel(i, j, Color.clear);
-                    }
-                }
-                */
+                   while (y >= x)
+                   {
+                       texture.SetPixel(posX + x, posY + y, Color.clear);
+                       texture.SetPixel(posX + y, posY + x, Color.clear);
+                       texture.SetPixel(posX - x, posY + y, Color.clear);
+                       texture.SetPixel(posX - y, posY + x, Color.clear);
+                       texture.SetPixel(posX + x, posY - y, Color.clear);
+                       texture.SetPixel(posX + y, posY - x, Color.clear);
+                       texture.SetPixel(posX - x, posY - y, Color.clear);
+                       texture.SetPixel(posX - y, posY - x, Color.clear);
 
-                // Draw a square but use setPixels method, which optimized setPixel method
-                // Same optimization issue
-                /*
-                int mipCount = texture.mipmapCount;
-                Color[] colors = new Color[square * square];
-                for (int i = 0; i < colors.Length; i++)
-                {
-                    colors[i] =  Color.clear;
-                }
-                texture.SetPixels(posX, posY, square, square, colors);
-                */
+                       if (d >= 2 * x)
+                       {
+                           d -= 2 * x + 1;
+                           x++;
+                       }
+                       else if (d < 2 * (tempRadius - y))
+                       {
+                           d += 2 * y - 1;
+                           y--;
+                       }
+                       else
+                       {
+                           d += 2 * (y - x - 1);
+                           y--;
+                           x++;
+                       }
+                   }
 
-                // Draw a circle with the mouse position in center
-                // We repeat the algorithm with a lesser radius each time
-                int tempRadius = radius;
-                while(tempRadius >= 0)
-                {
-                    // Andres circle algorithm
-                    int x = 0;
-                    int y = tempRadius;
-                    int d = tempRadius - 1;
-
-                    while (y >= x)
-                    {
-                        texture.SetPixel(posX + x, posY + y, Color.clear);
-                        texture.SetPixel(posX + y, posY + x, Color.clear);
-                        texture.SetPixel(posX - x, posY + y, Color.clear);
-                        texture.SetPixel(posX - y, posY + x, Color.clear);
-                        texture.SetPixel(posX + x, posY - y, Color.clear);
-                        texture.SetPixel(posX + y, posY - x, Color.clear);
-                        texture.SetPixel(posX - x, posY - y, Color.clear);
-                        texture.SetPixel(posX - y, posY - x, Color.clear);
-
-                        if (d >= 2 * x)
-                        {
-                            d -= 2 * x + 1;
-                            x++;
-                        }
-                        else if (d < 2 * (tempRadius - y))
-                        {
-                            d += 2 * y - 1;
-                            y--;
-                        }
-                        else
-                        {
-                            d += 2 * (y - x - 1);
-                            y--;
-                            x++;
-                        }
-                    }
-
-                    tempRadius--;
-                }
-
+                   tempRadius--;
+               }
+               
                 texture.Apply();
                 GetComponent<Renderer>().material.mainTexture = texture;
             }
