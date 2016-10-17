@@ -14,6 +14,8 @@ public class scratchable : MonoBehaviour
     Vector3 lastMousePos;
     Vector3 lastTouchPos;
 
+    public ParticleSystem particles;
+
     void Start()
     {
         Texture2D texture = new Texture2D(1750, textHeight);
@@ -54,7 +56,7 @@ public class scratchable : MonoBehaviour
     * Draw circle on player input 
     */
 	void mouseInput(){
-		if(Input.GetMouseButton(1))
+		if(Input.GetMouseButton(0))
 		{
 			Texture2D texture = GetComponent<Renderer>().material.mainTexture as Texture2D;
 			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -104,12 +106,14 @@ public class scratchable : MonoBehaviour
 
 				tempRadius--;
 			}
+			ParticleSystem part = Instantiate(particles);
+			part.transform.position = new Vector3(pos.x, pos.y, -5.0f);
 
 			texture.Apply();
 			GetComponent<Renderer>().material.mainTexture = texture;
 		}
 
-		if(Input.GetMouseButton (0)) {
+		if(Input.GetMouseButton (1)) {
 			Vector3 mousePos = Camera.main.WorldToScreenPoint(Input.mousePosition);
 
 			Vector3 move = mousePos - lastMousePos;
