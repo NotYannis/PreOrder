@@ -9,10 +9,22 @@ public class scratchable : MonoBehaviour
     int pixelY = 0;
     int iPixelX = -1;
 
+    bool isSliding = false;
+    enum slideDirection
+    {
+        up,
+        down,
+        left,
+        right,
+        none
+    }
+    slideDirection actualSlide = slideDirection.none;
+    int lastPosX = 0;
+    int lastPosY = 0;
+    
     void Start()
     {
         Texture2D texture = new Texture2D(1750, 800);
-        // Texture2D texture = new Texture2D(400, 400);
         GetComponent<Renderer>().material.mainTexture = texture;
 
         for (int y = 0; y < texture.height; y++)
@@ -30,16 +42,40 @@ public class scratchable : MonoBehaviour
     void Update()
     {
         /*
+        * Mobile input 
+        */
+        int nTouch = 0;
+        Touch inputTouch = new Touch();
+        foreach (Touch touch in Input.touches)
+        {
+            if (touch.phase == TouchPhase.Began)
+            {
+
+            }
+            inputTouch = Input.touches[0];
+            nTouch++;
+        }
+
+        /*
          * Move the mouse to scratch the screen 
         */
-        if (Input.GetMouseButton(0))
+        
+        if(nTouch > 1)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // inputTouch.position;
+        }
+        
+        // if(Input.GetMouseButtonDown(0))
+        if (nTouch == 1)
+        {
+            // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(inputTouch.position);
 
             if (Physics.Raycast(ray))
             {
                 Texture2D texture = GetComponent<Renderer>().material.mainTexture as Texture2D;
-                Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                // Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 pos = Camera.main.ScreenToWorldPoint(inputTouch.position);
 
                 int posX = Mathf.RoundToInt(pos.x);
                 int posY = Mathf.RoundToInt(pos.y);
@@ -72,51 +108,49 @@ public class scratchable : MonoBehaviour
                 texture.SetPixels(posX, posY, square, square, colors);
                 */
 
-               // Draw a circle with the mouse position in center
-               // We repeat the algorithm with a lesser radius each time
-               /*
-               int tempRadius = radius;
-               while(tempRadius >= 0)
-               {
-                   // Andres circle algorithm
-                   int x = 0;
-                   int y = tempRadius;
-                   int d = tempRadius - 1;
+                // Draw a circle with the mouse position in center
+                // We repeat the algorithm with a lesser radius each time
+                int tempRadius = radius;
+                while(tempRadius >= 0)
+                {
+                    // Andres circle algorithm
+                    int x = 0;
+                    int y = tempRadius;
+                    int d = tempRadius - 1;
 
-                   while (y >= x)
-                   {
-                       texture.SetPixel(posX + x, posY + y, Color.clear);
-                       texture.SetPixel(posX + y, posY + x, Color.clear);
-                       texture.SetPixel(posX - x, posY + y, Color.clear);
-                       texture.SetPixel(posX - y, posY + x, Color.clear);
-                       texture.SetPixel(posX + x, posY - y, Color.clear);
-                       texture.SetPixel(posX + y, posY - x, Color.clear);
-                       texture.SetPixel(posX - x, posY - y, Color.clear);
-                       texture.SetPixel(posX - y, posY - x, Color.clear);
+                    while (y >= x)
+                    {
+                        texture.SetPixel(posX + x, posY + y, Color.clear);
+                        texture.SetPixel(posX + y, posY + x, Color.clear);
+                        texture.SetPixel(posX - x, posY + y, Color.clear);
+                        texture.SetPixel(posX - y, posY + x, Color.clear);
+                        texture.SetPixel(posX + x, posY - y, Color.clear);
+                        texture.SetPixel(posX + y, posY - x, Color.clear);
+                        texture.SetPixel(posX - x, posY - y, Color.clear);
+                        texture.SetPixel(posX - y, posY - x, Color.clear);
 
-                       if (d >= 2 * x)
-                       {
-                           d -= 2 * x + 1;
-                           x++;
-                       }
-                       else if (d < 2 * (tempRadius - y))
-                       {
-                           d += 2 * y - 1;
-                           y--;
-                       }
-                       else
-                       {
-                           d += 2 * (y - x - 1);
-                           y--;
-                           x++;
-                       }
-                   }
+                        if (d >= 2 * x)
+                        {
+                            d -= 2 * x + 1;
+                            x++;
+                        }
+                        else if (d < 2 * (tempRadius - y))
+                        {
+                            d += 2 * y - 1;
+                            y--;
+                        }
+                        else
+                        {
+                            d += 2 * (y - x - 1);
+                            y--;
+                            x++;
+                        }
+                    }
 
-                   tempRadius--;
-               }
-               */
+                    tempRadius--;
+                }
 
-               texture.Apply();
+                texture.Apply();
                 GetComponent<Renderer>().material.mainTexture = texture;
             }
         }
